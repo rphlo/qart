@@ -48,7 +48,7 @@ import (
 	"rsc.io/qr"
 	"rsc.io/qr/coding"
 	"rsc.io/qr/gf256"
-	"github.com/rphlo/qart/qrweb/resize"
+	"rsc.io/swtch/qrweb/resize"
 )
 
 func runTemplate(w http.ResponseWriter, name string, data interface{}) {
