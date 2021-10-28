@@ -1,0 +1,181 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>QArt Coder</title>
+    <style>
+    #controls {
+    }
+    #output {
+      float: left;
+      width: 250px;
+      height: 100%;
+    }
+    #help {
+      font-size: 80%;
+    }
+    #about {
+      margin-top: 2em;
+    }
+    h1 {
+      text-align: left !important;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="article">
+    
+    <div id="output">
+    </div>
+
+    <div id="leftcol">
+    <h1>QArt Coder</h1>
+      <div id="controls">
+        <label for="url">URL:</label> <input id="url" type="text" size="100" value="{{.URL}}">
+        <br>
+        <font size=-1>Tip: Short URLs work best.</font>
+        <br>
+        <table id="arrows">
+          <tr>
+            <td>
+              <table cellspacing=0 cellpadding=0 border=0>
+              <tr><td><td><a style="button" href="javascript:up()"><img src="/qr/arrow?size=48&dir=1"><td>
+              <tr><td><a style="button" href="javascript:left()"><img src="/qr/arrow?size=48&dir=2"><td><img src="/qr/draw?show=png&i={{.Name}}"><td><a style="button" href="javascript:right()"><img src="/qr/arrow?size=48&dir=0">
+              <tr><td><td><a style="button" href="javascript:down()"><img src="/qr/arrow?size=48&dir=3"><td>
+              </table>
+            <td>
+              <table cellspacing=5 cellpadding=0 border=0>
+              <tr>
+                <td><a style="button" href="javascript:smaller()"><img src="/qr/arrow?size=20&dir=2">
+                <td>QR Size
+                <td><a style="button" href="javascript:bigger()"><img src="/qr/arrow?size=20&dir=0">
+      
+              <tr>
+                <td><a style="button" href="javascript:ismaller()"><img src="/qr/arrow?size=20&dir=2">
+                <td>Image Size
+                <td><a style="button" href="javascript:ibigger()"><img src="/qr/arrow?size=20&dir=0">
+              </table>
+  
+            <td>
+              <label for="rand">
+                <input type="checkbox" id="rand" onclick="update()"></input> Random Pixels
+              </label>
+              <br>
+      
+              <label for="data">
+                <input type="checkbox" id="data" onclick="update()"></input> Data Pixels Only
+              </label>
+              <br>
+      
+              <label for="dither">
+                <input type="checkbox" id="dither" onclick="update()"></input> Dither
+              </label>
+              <br>
+      
+              <label for="control">
+                <input type="checkbox" id="control" onclick="update()"></input> Show Controllable Pixels
+              </label>
+              <br>
+              
+              <button onclick="update()">Update</button>
+              &nbsp; &nbsp;
+              <button onclick="rotate()">Rotate</button>
+        </table>
+  
+        <div>
+          <form method="POST" enctype="multipart/form-data" action="/qr/draw?upload=0">
+            <input type="file" name="image">
+            <br>
+            <input type="submit" value="Upload Image">
+            <br>
+            <font size=-1>Tip: small, high contrast images work best.</font>
+          </form>
+        </div>
+      </div>
+  
+  
+      <div id="help">
+      Use the blue buttons to move the image within the code<br>
+      and to change the size of the code and the image.<br>
+      <br>
+    </div>
+    </div>
+
+      <script>
+        var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+function byid(id) {
+	return document.getElementById(id);
+}
+function valof(id) {
+	return byid(id).checked ? 1 : 0;
+}
+function text(e) {
+	if (e == null) {
+		return "";
+	}
+	var s = e.value;
+	return s;
+}
+ 
+var lastQ = null
+var ticking = false
+var ticksSinceChange = 0
+ 
+function update() {
+	var q = theImage();
+	var req = new XMLHttpRequest()
+	req.onreadystatechange = function() {
+		if(req.readyState == 4 && req.status == 200) {
+			byid("output").innerHTML = req.responseText
+		}
+	}
+	req.open("GET", q, true)
+	req.send(null)
+	
+}
+
+function theImage() {
+	return "/qr/draw?i=" + img + "&u=" + encodeURI(byid("url").value) + "&m=" + m + "&x=" + dx + "&y=" + dy + "&v=" + v + "&c=" + valof("control") + "&r=" + valof("rand") + "&d=" + valof("data") + "&t=" + valof("dither") + "&s=" + Math.floor(Math.random()*1e9) + "&z=" + z + "&o=" + rotation
+}
+
+var dx=4
+var dy=4
+var url="/qart"
+var m=2
+var v=6
+var z=0
+var img="pjw"
+var cheat=0
+var rotation=0
+
+function up() { dy++; update(); }
+function down() { dy--; update(); }
+function left() { dx++; update(); }
+function right() { dx--; update(); }
+function bigger() { if(v < 8) { v++; update(); } }
+function smaller() { if(v > 1) { v--; update(); } }
+function setimg(s) { img=s; update(); }
+function togglemask() { if(m>=0) m=-1; else m=2; update(); }
+function ibigger() { z++; update(); }
+function ismaller() { z--; update(); }
+function rotate() { rotation = (rotation+1) & 3; update(); }
+
+
+}
+      </script>
+      <script>
+      update();
+      </script>
+
+  </body>
+</html>
