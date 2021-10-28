@@ -99,15 +99,14 @@ func isTagName(s string) bool {
 }
 
 // Draw is the handler for drawing a QR code.
+
 func Draw(w http.ResponseWriter, req *http.Request) {
 	url := req.FormValue("url")
 	if url == "" {
-		url = "http://swtch.com/qr"
+		url = "http://rphlo.com/"
 	}
 	if req.FormValue("upload") == "1" {
-		w.WriteHeader(http.StatusForbidden)
-		w.Write([]byte("Uploads disabled, sorry.\n"))
-		// upload(w, req, url)
+		upload(w, req, url)
 		return
 	}
 
@@ -212,7 +211,7 @@ func Draw(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(w, "<center><img src=\"data:image/png;base64,")
 	io.WriteString(w, base64.StdEncoding.EncodeToString(dat))
 	fmt.Fprint(w, "\" /><br>")
-	fmt.Fprintf(w, "<form method=\"POST\" action=\"%s&l=1\"><input type=\"submit\" value=\"Save this QR code\"></form>\n", m.Link())
+	fmt.Fprintf(w, "<form method=\"POST\" action=\"%s&l=2\"><input type=\"submit\" value=\"Save this QR code\"></form>\n", m.Link())
 	fmt.Fprintf(w, "</center>\n")
 	fmt.Fprintf(w, "<br><center><font size=-1>%v</font></center>\n", time.Now().Sub(t0))
 }
