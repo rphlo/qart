@@ -1,4 +1,4 @@
-module rsc.io/swtch/qrweb
+module github.com/rphlo/qart/qrweb
 
 go 1.15
 
