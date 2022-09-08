@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 	"runtime/debug"
-	qrweb "github.com/rphlo/qart/qrweb"
+	qrweb "rsc.io/swtch/qrweb"
 )
 
 
